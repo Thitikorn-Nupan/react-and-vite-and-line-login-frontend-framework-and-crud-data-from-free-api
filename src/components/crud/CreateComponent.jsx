@@ -19,24 +19,19 @@ class CreateComponent extends Component {
     }
 
     async componentDidMount() {
-
         await liff.init({liffId: process.env.LIFF_ID}).then(async () => { // First liff id have to exist
             try {
-
                 await liff.ready.then(async () => {
                     const isUserLogged = sessionStorage.getItem("isUserLoggedIn")
                     if (isUserLogged === null) {
                         throw new Error('User logged not found') // Second User have to logged
                     }
-                    this.setState({
-                        isUserLoggedIn: isUserLogged
-                    })
+                    this.setState({isUserLoggedIn: isUserLogged})
                 })
 
             } catch (error) {
                 // if user try to get page but not login
-                // console.log(error)
-                this.props.navigate('/')
+                this.props.navigate('/login')
             }
         })
 
@@ -53,10 +48,9 @@ class CreateComponent extends Component {
         )
     }
 
-
     formCreateUser () {
         return (
-            <div className="container mt-4 w-50" style={{margin: "0 auto"}} onSubmit={this.handleRequestPostMethod}>
+            <div className="container mt-4 w-50" style={{margin: "0 auto"}} onSubmit={this.handleSubmit}>
                 <form className={"form-control p-2 "}>
                     <div className="mb-3">
                         Id
@@ -78,7 +72,6 @@ class CreateComponent extends Component {
                         <input type="password" className="form-control" name="password"
                                onChange={this.handleInputChange}/>
                     </div>
-                    {/* onSubmit work with button type submit */}
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -106,7 +99,7 @@ class CreateComponent extends Component {
     }
 
 
-    handleRequestPostMethod =  async (event) => {
+    handleSubmit =  async (event) => {
         event.preventDefault()
         const response = await fetch(this.fakeStoreApi, {
             method: "POST",
@@ -134,9 +127,10 @@ class CreateComponent extends Component {
             )
         })
 
-        if (response.status === 200) {
+        if (response.status === 201) {
             // life cycle of hook (function)
-            this.props.navigate(`/reads-and-read`);
+            alert('create successfully')
+            this.props.navigate('/reads-and-read');
         }
     }
 
@@ -148,9 +142,7 @@ class CreateComponent extends Component {
         else {
             component = this.formCreateUser()
         }
-        return (
-            (component)
-        )
+        return component
     }
 }
 

@@ -1,4 +1,5 @@
 import {Component} from "react";
+import React from "react";
 import {liff} from "@line/liff";
 import convertClassToFunction from "../convertClassToFunction.jsx";
 import {jwtDecode} from "jwt-decode";
@@ -27,16 +28,13 @@ class ReadsAndReadComponent extends Component {
     }
 
     async componentDidMount() {
+        // the first case if user was not login ** LiffId is not found. Note process.env.LIFF_ID i config on vite.config.js file
         await liff.init({liffId: process.env.LIFF_ID}).then(async () => {
-            // the first case if user was not login
-            // ** LiffId is not found.
-            console.log('initial liff id')
             try {
                 await this.handleSetSateProfileAndJwtPayload();
                 await this.handleSetSateUsers();
             } catch (error) {
-                console.log(error)
-                this.props.navigate('/')
+                this.props.navigate('/login')
             }
         })
     }
@@ -45,9 +43,7 @@ class ReadsAndReadComponent extends Component {
         await liff.ready.then(async () => {
             const profile = await liff.getProfile()
             const token = liff.getIDToken()
-            // console.log('liff.getIDToken() ', token)
             const decodeToken = jwtDecode(token); // ** decode jwt and you can get payload
-            // console.log('jwtDecode(token) ', decodeToken)
             this.setState({
                 enablePage: true,
                 profile: {
@@ -68,8 +64,18 @@ class ReadsAndReadComponent extends Component {
     async handleSetSateUsers() {
         const users = await fetch(`${this.fakeStoreApi}?limit=5`);
         const resultUser = await users.json();
-        this.setState({
-            users: resultUser
+        this.setState({users: resultUser})
+    }
+
+    async handleDelete(id) {
+        await fetch(`${this.fakeStoreApi}/${id}`, {
+            method: 'DELETE'
+        }).then(res => {
+            if (res.status === 200) {
+                alert('deleted successfully')
+                // life cycle of hook (function)
+                this.props.navigate('/reads-and-read');
+            }
         })
     }
 
@@ -87,18 +93,6 @@ class ReadsAndReadComponent extends Component {
         this.props.navigate(`/read/edit?id=${id}`);
     }
 
-    async handleDeleteUser(id) {
-        await fetch(`${this.fakeStoreApi}/${id}`, {
-            method: "DELETE"
-        }).then(res => {
-            if (res.status === 200) {
-                alert('deleted successfully')
-                // life cycle of hook (function)
-                this.props.navigate(`/reads-and-read`);
-            }
-        })
-
-    }
 
     usersTable() {
         return (
@@ -116,19 +110,15 @@ class ReadsAndReadComponent extends Component {
                                             <div className="ms-2 c-details">
                                                 <h6 className="mb-0">{this.state.profile.name}</h6>
                                                 <span>{this.state.profile.statusMessage}</span>
-
                                             </div>
                                         </div>
                                         <div className={"badge badge-pill badge-success"}><span>Active</span></div>
                                     </div>
                                     <span className={"mt-2"}>Email : {this.state.jwtPayload.email}</span>
-                                    <div className="mt-3"><span
-                                        className="text1">Login Expired : {this.state.jwtPayload.exp} </span>
+                                    <div className="mt-3"><span className="text1">Login Expired : {this.state.jwtPayload.exp} </span>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <table className="table mt-3 w-75" style={{margin: "0 auto"}}>
@@ -142,25 +132,23 @@ class ReadsAndReadComponent extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {
-                            this.state.users?.map(
-                                (user) => (
-                                    // if I called by this.handle2OnRowClick ** student will be undefined
-                                    <tr key={user.id}>
+                        {this.state.users?.map((user) => (
+                                // if I called by this.handle2OnRowClick ** student will be undefined
+                                <React.Fragment key={user.id}>
+                                    <tr>
                                         <td>{user.id}</td>
                                         <td>{user.email}</td>
                                         <td>{user.username}</td>
                                         <td>{user.password}</td>
                                         <td>
-                                            <button className={"btn btn-warning m-lg-2"}
-                                                    onClick={() => this.handleUpdateComponent(user.id)}>edit
-                                            </button>
-                                            <button className={"btn btn-danger"}
-                                                    onClick={() => this.handleDeleteUser(user.id)}>delete
-                                            </button>
+                                            <div className={"btn-group"}>
+                                                <button className={"btn btn-warning"} onClick={() => this.handleUpdateComponent(user.id)}>edit</button>
+                                                <button className={"btn btn-danger"} onClick={() => this.handleDelete(user.id)}>delete</button>
+                                            </div>
                                         </td>
                                     </tr>
-                                ))
+                                </React.Fragment>
+                            ))
                         }
                         </tbody>
                     </table>
@@ -171,11 +159,7 @@ class ReadsAndReadComponent extends Component {
 
 
     render() {
-        return (
-            <>
-                {this.state.users.length === 0 ? this.loadingComponent() : this.usersTable()}
-            </>
-        )
+        return this.state.users.length === 0 ? this.loadingComponent() : this.usersTable()
     }
 }
 

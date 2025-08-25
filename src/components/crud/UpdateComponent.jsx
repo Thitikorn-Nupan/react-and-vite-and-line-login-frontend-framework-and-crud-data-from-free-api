@@ -19,7 +19,6 @@ class UpdateComponent extends Component {
 
 
     async componentDidMount() {
-
         await liff.init({liffId: process.env.LIFF_ID}).then(async () => { // First liff id have to exist
             try {
                 await liff.ready.then(async () => {
@@ -31,9 +30,7 @@ class UpdateComponent extends Component {
                 })
 
             } catch (error) {
-                // if user try to get page but not login
-                // console.log(error)
-                this.props.navigate('/')
+                this.props.navigate('/login')
             }
         })
 
@@ -53,10 +50,10 @@ class UpdateComponent extends Component {
     }
 
     // handle function can specify async function
-    handleRequestPutMethod = async (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault()
         const response = await fetch(this.fakeStoreApi + `/${this.state.id}`, {
-            method: "PUT",
+            method: 'PUT',
             body: JSON.stringify(
                 {
                     email: this.state.email,
@@ -80,9 +77,8 @@ class UpdateComponent extends Component {
                 }
             )
         })
-
         if (response.status === 200) {
-            // life cycle of hook (function)
+            alert('update successfully')
             this.props.navigate(`/reads-and-read`);
         }
     }
@@ -108,38 +104,40 @@ class UpdateComponent extends Component {
     }
 
     loadingComponent() {
-        return (
-            <div className={"container text-center mt-4"}>
-                <div className="spinner-border  text-warning" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
+        return <div className={"container text-center mt-4"}>
+            <div className="spinner-border  text-warning" role="status">
+                <span className="visually-hidden">Loading...</span>
             </div>
-        )
+        </div>
     }
 
     formEditUser() {
         return (
-            <div className="container mt-4 w-50" style={{margin: "0 auto"}} onSubmit={this.handleRequestPutMethod}>
+            <div className="container mt-4 w-50" style={{margin: "0 auto"}} onSubmit={this.handleSubmit}>
                 <form className={"form-control p-2 "}>
                     <div className="mb-3">
                         Id
-                        <input type="number" className="form-control" name="id" placeholder={this.state.id}
+                        <input type="number" className="form-control" name="id"
+                               placeholder={this.state.id}
                                onChange={this.handleInputChange}/>
                     </div>
                     <div className="mb-3">
                         Email
-                        <input type="email" className="form-control" name="email" placeholder={this.state.email}
+                        <input type="email" className="form-control" name="email"
+                               placeholder={this.state.email}
                                onChange={this.handleInputChange}/>
                     </div>
                     <div className="mb-3">
                         Username
-                        <input type="text" className="form-control" name="username" placeholder={this.state.username}
+                        <input type="text" className="form-control" name="username"
+                               placeholder={this.state.username}
                                onChange={this.handleInputChange}/>
                     </div>
                     <div className="mb-3">
                         Password
                         <input type="password" className="form-control" name="password"
-                               placeholder={this.state.password} onChange={this.handleInputChange}/>
+                               placeholder={this.state.password}
+                               onChange={this.handleInputChange}/>
                     </div>
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
@@ -155,7 +153,7 @@ class UpdateComponent extends Component {
         else {
             component = this.formEditUser()
         }
-        return (component)
+        return component
     }
 }
 
