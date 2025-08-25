@@ -1,4 +1,5 @@
 import {useLocation, useNavigate} from "react-router-dom";
+
 // optional
 function mangeProps(AnyClassComponent) {
     return function (props) { // The function returns another function that takes props as input
@@ -18,7 +19,6 @@ function mangeProps(AnyClassComponent) {
 }
 
 function covertClassToFunction(AnyClassComponent) { // Parameter: The AnyComponent parameter remains the same, indicating that the function takes a generic component as input.
-
     return mangeProps(AnyClassComponent);
 }
 
