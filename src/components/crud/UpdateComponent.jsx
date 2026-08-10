@@ -4,7 +4,7 @@ import {liff} from "@line/liff";
 
 class UpdateComponent extends Component {
 
-    fakeStoreApi = "https://fakestoreapi.com/users"
+    fakeStoreApi = process.env.BASE_URL+"/users"
 
     constructor(props) {
         super(props);

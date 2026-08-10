@@ -1,17 +1,16 @@
 import {Component} from "react";
-import React from "react";
+import {Fragment} from "react";
 import {Link, Outlet} from "react-router-dom";
 import covertClassToFunction from "../convertClassToFunction.jsx";
 
 class MenubarComponent extends Component {
-
     render() {
         const routerLinks = [
-                {to:'/' , label :'React & Vite + Login With Line API'},
-                {to:'/login' , label :'Login/Logout'},
-                {to:'/reads-and-read' , label :'Read(s) Data'},
-                {to:'/create' , label :'Create Data'},
-            ]
+            {to: '/', label: 'React & Vite + Login With Line API'},
+            {to: '/login', label: 'Login/Logout'},
+            {to: '/reads-and-read', label: 'Read(s) Data'},
+            {to: '/create', label: 'Create Data'},
+        ]
         return (
             <>
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
@@ -22,17 +21,19 @@ class MenubarComponent extends Component {
                         <div className="collapse navbar-collapse" id="navbarsExample07">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Topic</a>
+                                    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                                       aria-expanded="false">Topic</a>
                                     <ul className="dropdown-menu">
                                         {routerLinks?.map((item, index) => (
-                                            <React.Fragment key={index}>
+                                            <Fragment key={index}>
                                                 {(index > 0)
                                                     ?
-                                                    <li><Link className="dropdown-item" to={item.to}>{item.label}</Link></li>
+                                                    <li><Link className="dropdown-item" to={item.to}>{item.label}</Link>
+                                                    </li>
                                                     :
                                                     null
                                                 }
-                                            </React.Fragment>
+                                            </Fragment>
                                         ))}
                                     </ul>
                                 </li>

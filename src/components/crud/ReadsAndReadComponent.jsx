@@ -6,7 +6,7 @@ import {jwtDecode} from "jwt-decode";
 
 class ReadsAndReadComponent extends Component {
 
-    fakeStoreApi = "https://fakestoreapi.com/users"
+    fakeStoreApi = process.env.BASE_URL+"/users"
 
     constructor(props) {
         super(props);
@@ -96,67 +96,64 @@ class ReadsAndReadComponent extends Component {
 
     usersTable() {
         return (
-            <>
-                <div>
-                    <div className="container mt-5 mb-3 ">
-                        <div className="row m-lg-4">
-                            <div className="col-md-4">
-                                <div className="card p-3 mb-2">
-                                    <div className="d-flex justify-content-between">
-                                        <div className="d-flex flex-row align-items-center">
-                                            <div className="icon">
-                                                <img src={this.state.profile.pictureUrl} width={"50"} alt=""/>
-                                            </div>
-                                            <div className="ms-2 c-details">
-                                                <h6 className="mb-0">{this.state.profile.name}</h6>
-                                                <span>{this.state.profile.statusMessage}</span>
-                                            </div>
+            <div>
+                <div className="container mt-5 mb-3 ">
+                    <div className="row m-lg-4">
+                        <div className="col-md-4">
+                            <div className="card p-3 mb-2">
+                                <div className="d-flex justify-content-between">
+                                    <div className="d-flex flex-row align-items-center">
+                                        <div className="icon">
+                                            <img src={this.state.profile.pictureUrl} width={"50"} alt=""/>
                                         </div>
-                                        <div className={"badge badge-pill badge-success"}><span>Active</span></div>
+                                        <div className="ms-2 c-details">
+                                            <h6 className="mb-0">{this.state.profile.name}</h6>
+                                            <span>{this.state.profile.statusMessage}</span>
+                                        </div>
                                     </div>
-                                    <span className={"mt-2"}>Email : {this.state.jwtPayload.email}</span>
-                                    <div className="mt-3"><span className="text1">Login Expired : {this.state.jwtPayload.exp} </span>
-                                    </div>
+                                    <div className={"badge badge-pill badge-success"}><span>Active</span></div>
+                                </div>
+                                <span className={"mt-2"}>Email : {this.state.jwtPayload.email}</span>
+                                <div className="mt-3"><span className="text1">Login Expired : {this.state.jwtPayload.exp} </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <table className="table mt-3 w-75" style={{margin: "0 auto"}}>
-                        <thead className="table table-secondary">
-                        <tr>
-                            <th>Id</th>
-                            <th>Email</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Options</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.users?.map((user) => (
-                                // if I called by this.handle2OnRowClick ** student will be undefined
-                                <React.Fragment key={user.id}>
-                                    <tr>
-                                        <td>{user.id}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.username}</td>
-                                        <td>{user.password}</td>
-                                        <td>
-                                            <div className={"btn-group"}>
-                                                <button className={"btn btn-warning"} onClick={() => this.handleUpdateComponent(user.id)}>edit</button>
-                                                <button className={"btn btn-danger"} onClick={() => this.handleDelete(user.id)}>delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </React.Fragment>
-                            ))
-                        }
-                        </tbody>
-                    </table>
                 </div>
-            </>
+                <table className="table mt-3 w-75" style={{margin: "0 auto"}}>
+                    <thead className="table table-secondary">
+                    <tr>
+                        <th>Id</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.state.users?.map((user) => (
+                        // if I called by this.handle2OnRowClick ** student will be undefined
+                        <React.Fragment key={user.id}>
+                            <tr>
+                                <td>{user.id}</td>
+                                <td>{user.email}</td>
+                                <td>{user.username}</td>
+                                <td>{user.password}</td>
+                                <td>
+                                    <div className={"btn-group"}>
+                                        <button className={"btn btn-warning"} onClick={() => this.handleUpdateComponent(user.id)}>edit</button>
+                                        <button className={"btn btn-danger"} onClick={() => this.handleDelete(user.id)}>delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </React.Fragment>
+                    ))
+                    }
+                    </tbody>
+                </table>
+            </div>
         )
     }
-
 
     render() {
         return this.state.users.length === 0 ? this.loadingComponent() : this.usersTable()

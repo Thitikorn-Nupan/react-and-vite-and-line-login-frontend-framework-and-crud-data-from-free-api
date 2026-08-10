@@ -8,20 +8,18 @@ import CreateComponent from "./components/crud/CreateComponent.jsx";
 
 function App() {
     return (
-        <>
-            <BrowserRouter > {/* basename={"/lab-react/line-login-frontend-framework"} */}
-                <Routes>
-                    {/* path main "/"  render 2 compoennts */}
-                    <Route path={"/"} element={<MenubarComponent/>}>
-                        {/* *** sub path main "/todo1,2,3" (still render on path main)*/}
-                        <Route path={"/login"} element={<LoginComponent/>}/>
-                        <Route path={"/reads-and-read"} element={<ReadsAndReadComponent/>}/>
-                        <Route path={"/read/edit"} element={<UpdateComponent/>}/>
-                        <Route path={"/create"} element={<CreateComponent/>}/>
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </>
+        <BrowserRouter> {/* basename={"/lab-react/line-login-frontend-framework"} */}
+            <Routes>
+                {/* path main "/"  render 2 compoennts */}
+                <Route path={"/"} element={<MenubarComponent/>}>
+                    {/* *** sub path main "/todo1,2,3" (still render on path main)*/}
+                    <Route path={"/login"} element={<LoginComponent/>}/>
+                    <Route path={"/reads-and-read"} element={<ReadsAndReadComponent/>}/>
+                    <Route path={"/read/edit"} element={<UpdateComponent/>}/>
+                    <Route path={"/create"} element={<CreateComponent/>}/>
+                </Route>
+            </Routes>
+        </BrowserRouter>
     )
 }
 
